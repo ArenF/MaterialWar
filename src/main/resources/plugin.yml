@@ -1,0 +1,6 @@
+name: MaterialWar
+version: '${project.version}'
+main: com.aren.materialwar.MaterialWar
+api-version: 1.19
+authors: [ AREN ]
+description: fight each other with that new using material way
