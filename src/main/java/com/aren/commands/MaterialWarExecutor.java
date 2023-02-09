@@ -69,6 +69,11 @@ public class MaterialWarExecutor implements CommandExecutor {
                 if (args[1].equalsIgnoreCase("@p") && args[1].equalsIgnoreCase("@s")) {
                     gameManager.joinPlayer(player);
                     player.sendMessage(player.getName() + "님이 참가하였습니다.");
+                    return true;
+                }
+                if (Bukkit.getPlayer(args[1]) != null) {
+                    gameManager.joinPlayer(Bukkit.getPlayer(args[1]));
+                    player.sendMessage(Bukkit.getPlayer(args[1]).getName() + "님이 참가하였습니다.");
 
                     return true;
                 }

@@ -19,7 +19,9 @@ public class MaterialWarTabCompleter implements TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
         if (arguments.isEmpty()) {
-            arguments.add("start"); arguments.add("config"); arguments.add("stop"); arguments.add("join"); arguments.add("leave");
+            arguments.add("start"); arguments.add("config");
+            arguments.add("stop"); arguments.add("join");
+            arguments.add("leave"); arguments.add("list");
         }
         if (playerable.isEmpty()) {
             playerable.add("@a"); playerable.add("@p"); playerable.add("@r"); playerable.add("@s");

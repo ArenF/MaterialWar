@@ -70,9 +70,11 @@ public class SkillConfig implements ConfigFile {
 
         config.set("diamond.damage", 2);
         config.set("diamond.length", 10);
+        config.set("diamond.cooltime", 8);
 
         config.set("gold_ingot.heal", 2);
         config.set("gold_ingot.condition_count", 5);
+        config.set("gold_ingot.cooltime", 10);
 
         config.set("iron_ingot.spear.length", 3);
         config.set("iron_ingot.spear.damage", 6);
@@ -82,6 +84,7 @@ public class SkillConfig implements ConfigFile {
         config.set("iron_ingot.dagger.length", 0.5);
         config.set("iron_ingot.dagger.damage", 9);
         config.set("iron_ingot.duration", 5);
+        config.set("iron_ingot.cooltime", 10);
 
         save();
     }

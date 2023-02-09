@@ -17,6 +17,7 @@ public class TimerBar {
     private int taskID = -1;
     private final JavaPlugin plugin;
     private BossBar bar;
+    private TimerBarState state = TimerBarState.WAITING;
 
     public TimerBar(JavaPlugin plugin, int taskID) {
         this.plugin = plugin;
@@ -40,8 +41,21 @@ public class TimerBar {
         bar.setVisible(true);
     }
 
+    public TimerBarState getState() {
+        return state;
+    }
+
+    public void setColor(String color) {
+        for (BarColor barColor : BarColor.values()) {
+            if (color.equals(barColor.toString())) {
+                bar.setColor(barColor);
+            }
+        }
+    }
+
     public void cast() {
         int timer = (int) ConfigManager.getInstance().getConfig("GameConfig").get("Game.time");
+        state = TimerBarState.RUNNING;
 
         taskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
 
@@ -54,6 +68,7 @@ public class TimerBar {
                     for (Player player : bar.getPlayers()) {
                         bar.removePlayer(player);
                     }
+                    state = TimerBarState.WAITING;
                     Bukkit.getScheduler().cancelTask(taskID);
                 }
                 bar.setProgress(progress);

@@ -35,7 +35,7 @@ public class ConfigManager {
 
     public void configDataSet() {
         for (ConfigFile configFile : configs.values()) {
-
+            configFile.createDataSection();
         }
     }
 

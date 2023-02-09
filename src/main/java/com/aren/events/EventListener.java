@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 public class EventListener implements Listener {
 
@@ -17,6 +18,14 @@ public class EventListener implements Listener {
     private static GameManager gm = GameManager.getInstance();
     private static EventManager eventManager = EventManager.getInstance();
     private DiamondSkill skill = new DiamondSkill();
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        if (eventManager.getDamageEventConsumer() == null) {
+            return;
+        }
+        eventManager.getPlayerJoinEventConsumer().accept(event);
+    }
 
     @EventHandler
     public void rightClickMaterial(PlayerInteractEvent event) {

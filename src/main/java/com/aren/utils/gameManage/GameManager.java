@@ -1,5 +1,6 @@
 package com.aren.utils.gameManage;
 
+import com.aren.events.EventManager;
 import com.aren.materialwar.MaterialWar;
 import com.aren.utils.ConfigManager;
 import com.aren.utils.GameState;
@@ -21,6 +22,7 @@ public class GameManager {
     private TimerBar invincible_bar;
     private TimerBar bar;
     private List<Player> participants = new ArrayList<Player>();
+    private List<UUID> participantsList = new ArrayList<>();
 
     GameState state = GameState.WAITING;
 
@@ -58,10 +60,24 @@ public class GameManager {
             castInvincibleTimer(participants);
         }
 
+        EventManager.getInstance().setPlayerJoinEventConsumer(event -> {
+            Player player = event.getPlayer();
+
+            for (UUID uuid : participantsList) {
+                if (!player.getUniqueId().equals(uuid))
+                    continue;
+
+                if (bar.getState().equals(TimerBarState.RUNNING)) {
+                    bar.addPlayer(player);
+                }
+            }
+        });
+
     }
 
     public void joinPlayer(Player player) {
         participants.add(player);
+        participantsList.add(player.getUniqueId());
     }
 
     private void giveStartItem() {
@@ -77,6 +93,11 @@ public class GameManager {
     private void castInvincibleTimer(List<Player> players) {
         invincible_bar = new TimerBar(MaterialWar.getPlugin());
         invincible_bar.createBar(TimerBar.format("무적시간이 끝나기까지"));
+        String color = (String) configManager.getConfig("GameConfig").get("invincible_color");
+        if (color == null)
+            color = "RED";
+
+        invincible_bar.setColor(color);
 
         for (Player player : players) {
             invincible_bar.addPlayer(player);
@@ -100,6 +121,12 @@ public class GameManager {
     private void castGameTimer(List<Player> players) {
         bar = new TimerBar(MaterialWar.getPlugin());
         bar.createBar(TimerBar.format("게임이 끝나기까지"));
+        String color = (String) configManager.getConfig("GameConfig").get("time_color");
+        if (color == null)
+            color = "RED";
+
+        bar.setColor(color);
+
         for (Player player : players) {
             bar.addPlayer(player);
         }

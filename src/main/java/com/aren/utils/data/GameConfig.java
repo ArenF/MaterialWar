@@ -64,7 +64,7 @@ public class GameConfig implements ConfigFile {
 
         config.set("game.invincible_duration", 0);
         config.set("game.invincible_color", "RED");
-        config.set("game.time", 0);
+        config.set("game.time", 120);
         config.set("game.time_color", "RED");
         config.set("game.default_item", null);
         save();
