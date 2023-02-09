@@ -4,3 +4,8 @@ main: com.aren.materialwar.MaterialWar
 api-version: 1.19
 authors: [ AREN ]
 description: fight each other with that new using material way
+
+commands:
+  MaterialGame:
+    description: 자원전쟁 플러그인 명령어입니다.
+    usage: /MaterialGame (start, config)

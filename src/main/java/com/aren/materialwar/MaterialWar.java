@@ -1,40 +1,44 @@
 package com.aren.materialwar;
 
-import com.aren.skills.DiamondSkill;
-import com.aren.skills.GoldSkill;
-import com.aren.skills.IronSkill;
-import com.aren.utils.GameManager;
-import com.aren.utils.SkillManager;
+import com.aren.commands.MaterialWarExecutor;
+import com.aren.commands.MaterialWarTabCompleter;
+import com.aren.events.EventListener;
+import com.aren.events.EventManager;
+import com.aren.utils.data.GameConfig;
+import com.aren.utils.data.SkillConfig;
+import com.aren.utils.gameManage.GameManager;
+import com.aren.utils.ConfigManager;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class MaterialWar extends JavaPlugin {
 
     private static JavaPlugin plugin = null;
     private static GameManager gameManager = GameManager.getInstance();
-    private static SkillManager skillManager = SkillManager.getInstance();
+    private static ConfigManager configManager = ConfigManager.getInstance();
+    private static EventManager eventManager = EventManager.getInstance();
+
     @Override
     public void onEnable() {
         // Plugin startup logic
         plugin = this;
 
-        if (!skillManager.getFile().isEmpty()) {
-            // 혹여 모를 초기화
-            skillManager.getFile().createFile();
-            DiamondSkill diamondSkill = new DiamondSkill(3.0f, 2);
-            IronSkill ironSkill = new IronSkill(15.0f, 5);
-            GoldSkill goldSkill = new GoldSkill(12.0f, 0.5);
-
-            skillManager.addNSave(diamondSkill);
-            skillManager.addNSave(ironSkill);
-            skillManager.addNSave(goldSkill);
-        }
-
-
+        plugin.getCommand("MaterialGame").setExecutor(new MaterialWarExecutor());
+        plugin.getCommand("MaterialGame").setTabCompleter(new MaterialWarTabCompleter());
+        Bukkit.getPluginManager().registerEvents(new EventListener(), plugin);
+        plugin.getLogger().info("Hello world!");
+        configManager.createConfigFile("SkillConfig", new SkillConfig(plugin));
+        configManager.createConfigFile("GameConfig", new GameConfig(plugin));
+        configManager.configDataSet();
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+    }
+
+    public static JavaPlugin getPlugin() {
+        return plugin;
     }
 
     public static GameManager getGameManager() {

@@ -1,5 +1,6 @@
 package com.aren.skills;
 
+import com.aren.utils.data.ConfigFile;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.World;
@@ -11,13 +12,13 @@ import java.util.UUID;
 
 public class IronSkill implements MaterialSkills {
 
+    private AbilityType type = AbilityType.IRON_INGOT;
     private long cooldown;
     private float cooltime = 0;
     private double duration;
 
-    public IronSkill(float cooling, double duration) {
-        this.cooltime = cooling;
-        this.duration = duration;
+    public IronSkill() {
+
     }
 
     public void setDuration(int duration) {
@@ -27,6 +28,7 @@ public class IronSkill implements MaterialSkills {
     public double getDuration() {
         return this.duration;
     }
+
 
     @Override
     public void activate(Player user) {
@@ -50,12 +52,8 @@ public class IronSkill implements MaterialSkills {
     }
 
     @Override
-    public Material getCost() {
-        return Material.IRON_INGOT;
+    public AbilityType getType() {
+        return type;
     }
 
-    @Override
-    public float getCooltime() {
-        return cooltime;
-    }
 }

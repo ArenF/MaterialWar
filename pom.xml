@@ -40,7 +40,30 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <outputFile>C:\Users\hjh04\OneDrive\바탕 화면\server\plugins\MaterialWar.jar</outputFile>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <configuration>
+                    <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
+                    <relocations>
+                        <relocation>
+                            <pattern>com.github.stefvanschie.inventoryframework</pattern>
+                            <shadedPattern>${project.build.directory}.inventoryframework</shadedPattern>
+                        </relocation>
+                    </relocations>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -70,6 +93,11 @@
             <artifactId>paper-api</artifactId>
             <version>1.19.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.stefvanschie.inventoryframework</groupId>
+            <artifactId>IF</artifactId>
+            <version>0.10.8</version>
         </dependency>
     </dependencies>
 </project>

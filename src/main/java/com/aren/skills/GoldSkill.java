@@ -1,22 +1,31 @@
 package com.aren.skills;
 
+import com.aren.utils.data.ConfigFile;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.World;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
 public class GoldSkill implements MaterialSkills {
 
+    private AbilityType type = AbilityType.GOLD_INGOT;
     private long cooldown;
-    private float cooltime;
-    private double duration;
+    private double cooltime;
+    private int maxCost;
+    private double heal;
 
-    public GoldSkill(float cooltime, double duration) {
-        this.cooltime = cooltime;
-        this.duration = duration;
+
+    public GoldSkill() {
+
     }
 
     @Override
@@ -28,23 +37,40 @@ public class GoldSkill implements MaterialSkills {
             return;
         }
 
+        World w = user.getWorld();
+        w.spawnParticle(Particle.COMPOSTER, user.getLocation(), 35, 1.5, 1.5, 1.5, true);
+
+        int cost = getCostToHeal(user.getInventory());
+        double healing = cost*heal > user.getHealthScale() ? user.getHealthScale() : cost*heal;
+
+        user.setHealth(healing);
+
         clearAll_debuffPotionEffect(user);
         cooldown = System.currentTimeMillis() + (int)(cooltime * 1000);
     }
 
-    @Override
-    public Material getCost() {
-        return Material.GOLD_INGOT;
+    public int getCostToHeal(PlayerInventory inventory) {
+        int amount = inventory.getItemInMainHand().getAmount();
+        int cost = 0;
+
+        if (maxCost >= amount) {
+            cost = amount;
+        } else {
+            cost = maxCost;
+        }
+
+        if (amount > cost) {
+            inventory.getItemInMainHand().setAmount(amount - cost);
+        } else if (amount == cost) {
+            inventory.removeItem(inventory.getItemInMainHand());
+        }
+        return cost;
     }
 
-    @Override
-    public float getCooltime() {
-        return cooltime;
-    }
 
     @Override
-    public double getDuration() {
-        return duration;
+    public AbilityType getType() {
+        return type;
     }
 
     public void clearAll_debuffPotionEffect(Player player) {
