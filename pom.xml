@@ -11,7 +11,6 @@
 
     <name>MaterialWar</name>
 
-    <description>fight each other with that new using material way</description>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -40,30 +39,8 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <outputFile>C:\Users\hjh04\OneDrive\바탕 화면\server\plugins\MaterialWar.jar</outputFile>
+                            <outputFile>C:\Users\user\Desktop\MCserver\plugins\MaterialWar.jar</outputFile>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
-                <configuration>
-                    <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
-                    <relocations>
-                        <relocation>
-                            <pattern>com.github.stefvanschie.inventoryframework</pattern>
-                            <shadedPattern>${project.build.directory}.inventoryframework</shadedPattern>
-                        </relocation>
-                    </relocations>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -85,19 +62,24 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
     </repositories>
 
     <dependencies>
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.19.2-R0.1-SNAPSHOT</version>
+            <version>1.19.3-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.stefvanschie.inventoryframework</groupId>
-            <artifactId>IF</artifactId>
-            <version>0.10.8</version>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.19.3-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
