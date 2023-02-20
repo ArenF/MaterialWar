@@ -47,6 +47,8 @@ public class MaterialWarExecutor implements CommandExecutor {
                 } else {
                     gameManager.start(GameState.STARTING);
                 }
+                configFile.getConfig().set("game.location", ((Player) sender).getLocation());
+                configFile.save();
                 return true;
             } else if (args[0].equalsIgnoreCase("join")) {
                 if (args.length == 1) {

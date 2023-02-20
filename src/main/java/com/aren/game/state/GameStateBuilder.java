@@ -32,6 +32,7 @@ public abstract class GameStateBuilder {
     public void activate() {
         changeState();
         castTimer();
+        setWorldborder();
         managePlayers();
         activateMessage();
     }

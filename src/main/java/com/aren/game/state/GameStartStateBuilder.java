@@ -6,6 +6,7 @@ import com.aren.config.ConfigFile;
 import com.aren.config.ConfigManager;
 import com.aren.utils.GamePlayer;
 import com.aren.utils.TimerBar;
+import com.aren.utils.WorldBarrier;
 import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
 
@@ -62,7 +63,8 @@ public class GameStartStateBuilder extends GameStateBuilder{
 
     @Override
     protected void setWorldborder() {
-
+        WorldBarrier worldBarrier = new WorldBarrier(gameConfig.getConfig().getLocation("game.location"), timerBar);
+        worldBarrier.run();
     }
 
     @Override

@@ -32,14 +32,16 @@ public final class MaterialWar extends JavaPlugin {
             gameConfiguration.set("game.time", "30m 0s");
             gameConfiguration.set("game.invulnerable_time", "5m 0s");
             gameConfiguration.set("game.invulnerable", true);
-            gameConfiguration.set("game.worldBorder.enable", true);
-            gameConfiguration.set("game.worldBorder.damage", 2.0);
-            gameConfiguration.set("game.worldBorder.buffer", 10.0);
-            gameConfiguration.set("game.worldBorder.default_size", 60.0);
-            gameConfiguration.set("game.worldBorder.reduce_distance", 10.0);
-
+            gameConfiguration.set("game.worldBorder.enable", true); //월드보더 활성화
+            gameConfiguration.set("game.worldBorder.damage", 2.0); //월드보더 데미지 설정
+            gameConfiguration.set("game.worldBorder.buffer", 10.0); // 월드보더 buffer 거리를 벗어나면 데미지 증가
+            gameConfiguration.set("game.worldBorder.default_size", 60.0); //기본 사이즈 설정
+            gameConfiguration.set("game.worldBorder.reduce_count", 5); //줄어드는 횟수 설정
+            gameConfiguration.set("game.worldBorder.reduce_distance", 10.0); //줄어드는 거리 설정
+            gameConfiguration.set("game.worldBorder.reduce_duration", 30.0); //줄어드는 시간 설정
 
             gameConfiguration.set("game.deathMessage", "player가 killer에게 살해당하였습니다.");
+            gameConfiguration.createSection("game.startLocation");
             gameConfig.save();
         }
 

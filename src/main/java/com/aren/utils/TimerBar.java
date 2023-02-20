@@ -31,6 +31,10 @@ public class TimerBar {
         this.players = players;
     }
 
+    public BossBar getBar() {
+        return bar;
+    }
+
     public void createBar() {
         bar = Bukkit.createBossBar(title, color, BarStyle.SOLID);
         bar.setVisible(true);
