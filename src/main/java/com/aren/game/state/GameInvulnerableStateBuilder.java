@@ -71,6 +71,11 @@ public class GameInvulnerableStateBuilder extends GameStateBuilder {
     }
 
     @Override
+    protected void setWorldborder() {
+
+    }
+
+    @Override
     protected void activateMessage() {
         for (GamePlayer player : players) {
             player.getPlayer().sendMessage(format("무적시간이 정해졌습니다."));

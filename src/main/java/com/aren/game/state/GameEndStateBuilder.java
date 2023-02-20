@@ -33,6 +33,11 @@ public class GameEndStateBuilder extends GameStateBuilder {
     }
 
     @Override
+    protected void setWorldborder() {
+
+    }
+
+    @Override
     protected void activateMessage() {
         for (GamePlayer player : players) {
             player.getPlayer().sendMessage("게임이 끝났습니다.");
