@@ -2,15 +2,16 @@ package com.aren.utils;
 
 import com.aren.game.GameManager;
 import com.aren.game.state.GameState;
-import com.aren.game.state.GameStateBuilder;
 import com.aren.materialwar.MaterialWar;
+import com.aren.utils.player.GamePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
-import org.bukkit.util.Consumer;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class TimerBar {
 
@@ -19,12 +20,12 @@ public class TimerBar {
     private int time;
     private String title;
     private BarColor color;
-    private List<GamePlayer> players;
+    private HashMap<UUID, GamePlayer> players;
     private int taskId = -1;
     private boolean closed = false;
     private BossBar bar;
 
-    public TimerBar(String title, int time, BarColor color, List<GamePlayer> players) {
+    public TimerBar(String title, int time, BarColor color, HashMap<UUID, GamePlayer> players) {
         this.time = time;
         this.title = title;
         this.color = color;
@@ -43,7 +44,7 @@ public class TimerBar {
 
     public void cast() {
 
-        for (GamePlayer player : players) {
+        for (GamePlayer player : players.values()) {
             bar.addPlayer(player.getPlayer());
         }
 

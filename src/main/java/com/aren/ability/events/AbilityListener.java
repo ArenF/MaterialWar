@@ -5,26 +5,12 @@ import com.aren.config.ConfigFile;
 import com.aren.config.ConfigManager;
 import com.aren.game.GameManager;
 import com.aren.game.state.GameState;
-import com.aren.utils.GamePlayer;
-import com.aren.utils.PersonalVector;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
+import com.aren.utils.player.GamePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
-
-import java.util.Objects;
 
 public class AbilityListener implements Listener {
 

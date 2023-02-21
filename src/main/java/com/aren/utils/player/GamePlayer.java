@@ -1,4 +1,4 @@
-package com.aren.utils;
+package com.aren.utils.player;
 
 import com.aren.ability.AbilityType;
 import com.aren.ability.MaterialAbility;
@@ -10,13 +10,15 @@ import java.util.UUID;
 
 public class GamePlayer {
 
+    private PlayerState state;
     private String name;
     private UUID uniqueId;
     private HashMap<AbilityType, MaterialAbility> abilities = new HashMap<>();
 
-    public GamePlayer(Player player) {
+    public GamePlayer(Player player, PlayerState state) {
         this.name = player.getName();
         this.uniqueId = player.getUniqueId();
+        this.state = state;
     }
 
     public String getName() {

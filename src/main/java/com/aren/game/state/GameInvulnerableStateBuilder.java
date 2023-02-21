@@ -5,21 +5,24 @@ import com.aren.ability.factory.MaterialAbilityFactory;
 import com.aren.config.ConfigFile;
 import com.aren.config.ConfigManager;
 import com.aren.game.GameManager;
-import com.aren.utils.GamePlayer;
+import com.aren.utils.player.GamePlayer;
 import com.aren.utils.TimerBar;
+import com.aren.utils.WorldBarrier;
 import org.bukkit.boss.BarColor;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class GameInvulnerableStateBuilder extends GameStateBuilder {
 
-    private List<GamePlayer> players;
+    private HashMap<UUID, GamePlayer> players;
     private TimerBar bar;
     private ConfigFile gameConfig;
     private GameManager gameManager = GameManager.getInstance();
 
-    public GameInvulnerableStateBuilder(List<GamePlayer> gamePlayers) {
+    public GameInvulnerableStateBuilder(HashMap<UUID, GamePlayer> gamePlayers) {
         players = gamePlayers;
         gameConfig = ConfigManager.getInstance().getConfigFile("gameConfig");
     }
@@ -46,7 +49,7 @@ public class GameInvulnerableStateBuilder extends GameStateBuilder {
     @Override
     protected void managePlayers() {
         MaterialAbilityFactory factory = new MaterialAbilityFactory();
-        for (GamePlayer player : players) {
+        for (GamePlayer player : players.values()) {
             player.addAbility(AbilityType.DIAMOND, factory.createAbility(AbilityType.DIAMOND, player));
             player.addAbility(AbilityType.IRON, factory.createAbility(AbilityType.IRON, player));
             player.addAbility(AbilityType.GOLD, factory.createAbility(AbilityType.GOLD, player));
@@ -60,7 +63,7 @@ public class GameInvulnerableStateBuilder extends GameStateBuilder {
         gameManager.setInvulnerableEventConsumer(event -> {
             if (!(event.getEntity() instanceof Player))
                 return;
-            for (GamePlayer player : players) {
+            for (GamePlayer player : players.values()) {
                 if (!player.getUniqueId().equals(event.getEntity().getUniqueId())) {
                     continue;
                 }
@@ -71,21 +74,31 @@ public class GameInvulnerableStateBuilder extends GameStateBuilder {
     }
 
     @Override
-    protected void setWorldborder() {
+    protected void activateWorldBorder() {
+        if (!gameConfig.getConfig().isLocation("game.startLocation")) {
+            return;
+        }
 
+        worldBarrier.setTimer(null);
+        worldBarrier.run();
+    }
+
+    @Override
+    protected void deactivateWorldBorder() {
+        worldBarrier.stop();
     }
 
     @Override
     protected void activateMessage() {
-        for (GamePlayer player : players) {
+        for (GamePlayer player : players.values()) {
             player.getPlayer().sendMessage(format("무적시간이 정해졌습니다."));
         }
     }
 
     @Override
     protected void deactivateMessage() {
-        for (GamePlayer player : players) {
-            player.getPlayer().sendMessage(format("게임이 중단되었습니다."));
+        for (GamePlayer player : players.values()) {
+            player.getPlayer().sendMessage(format("무적시간이 끝났습니다."));
         }
     }
 }

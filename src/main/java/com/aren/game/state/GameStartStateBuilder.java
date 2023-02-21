@@ -4,21 +4,27 @@ import com.aren.ability.AbilityType;
 import com.aren.ability.factory.MaterialAbilityFactory;
 import com.aren.config.ConfigFile;
 import com.aren.config.ConfigManager;
-import com.aren.utils.GamePlayer;
+import com.aren.utils.player.GamePlayer;
 import com.aren.utils.TimerBar;
 import com.aren.utils.WorldBarrier;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.Team;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class GameStartStateBuilder extends GameStateBuilder{
 
-    private List<GamePlayer> users;
+    private HashMap<UUID, GamePlayer> users;
     private TimerBar timerBar;
     private ConfigFile gameConfig;
 
-    public GameStartStateBuilder(List<GamePlayer> users) {
+    public GameStartStateBuilder(HashMap<UUID, GamePlayer> users) {
 
         this.users = users;
         gameConfig = ConfigManager.getInstance().getConfigFile("gameConfig");
@@ -49,10 +55,12 @@ public class GameStartStateBuilder extends GameStateBuilder{
     protected void managePlayers() {
         MaterialAbilityFactory factory = new MaterialAbilityFactory();
 //        플레이어들이 사용할 스킬들을 활성화
-        for (GamePlayer player: users) {
+        for (GamePlayer player: users.values()) {
             player.addAbility(AbilityType.DIAMOND, factory.createAbility(AbilityType.DIAMOND, player));
             player.addAbility(AbilityType.IRON, factory.createAbility(AbilityType.IRON, player));
             player.addAbility(AbilityType.GOLD, factory.createAbility(AbilityType.GOLD, player));
+
+
         }
     }
 
@@ -62,22 +70,27 @@ public class GameStartStateBuilder extends GameStateBuilder{
     }
 
     @Override
-    protected void setWorldborder() {
-        WorldBarrier worldBarrier = new WorldBarrier(gameConfig.getConfig().getLocation("game.location"), timerBar);
+    protected void activateWorldBorder() {
+        worldBarrier.setTimer(timerBar);
         worldBarrier.run();
     }
 
     @Override
+    protected void deactivateWorldBorder() {
+        worldBarrier.stop();
+    }
+
+    @Override
     protected void activateMessage() {
-        for (GamePlayer player : users) {
-            player.getPlayer().sendMessage(format("무적시간이 활성화되었습니다."));
+        for (GamePlayer player : users.values()) {
+            player.getPlayer().sendMessage(format("게임이 시작되었습니다."));
         }
     }
 
     @Override
     protected void deactivateMessage() {
-        for (GamePlayer player : users) {
-            player.getPlayer().sendMessage(format("무적시간이 끝났습니다."));
+        for (GamePlayer player : users.values()) {
+            player.getPlayer().sendMessage(format("게임이 끝났습니다."));
         }
     }
 

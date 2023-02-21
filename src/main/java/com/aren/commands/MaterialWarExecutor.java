@@ -42,13 +42,16 @@ public class MaterialWarExecutor implements CommandExecutor {
 
                 boolean isInvulnerable = configFile.getConfig().getBoolean("game.invulnerable");
 
+                if (!configFile.getConfig().isLocation("game.startLocation")) {
+                    configFile.getConfig().set("game.startLocation", ((Player) sender).getLocation());
+                    configFile.save();
+                }
+
                 if (isInvulnerable) {
                     gameManager.start(GameState.INVULNERABLE);
                 } else {
                     gameManager.start(GameState.STARTING);
                 }
-                configFile.getConfig().set("game.location", ((Player) sender).getLocation());
-                configFile.save();
                 return true;
             } else if (args[0].equalsIgnoreCase("join")) {
                 if (args.length == 1) {
@@ -64,7 +67,7 @@ public class MaterialWarExecutor implements CommandExecutor {
                     Player player = (Player) Bukkit.getOnlinePlayers().toArray()[i];
                     gameManager.joinPlayer(player);
                     return true;
-                } else if (args[1].equalsIgnoreCase("@s")) {
+                } else if (args[1].equalsIgnoreCase("@s") || args[1].equalsIgnoreCase("@p")) {
                     Player player = (Player) sender;
                     gameManager.joinPlayer(player);
                     return true;
@@ -75,8 +78,35 @@ public class MaterialWarExecutor implements CommandExecutor {
                 } else {
                     gameManager.sendMessage("해당 플레이어를 찾을 수 없습니다.");
                 }
+            } else if (args[0].equalsIgnoreCase("leave")) {
+                if (args.length == 1) {
+                    sender.sendMessage(ChatColor.RED + "해당 메세지는 완성되지 않았습니다.");
+                    return false;
+                }
+                if (args[1].equalsIgnoreCase("@a")) {
+                    for (Player player : Bukkit.getOnlinePlayers())
+                        gameManager.leavePlayer(player);
+                } else if (args[1].equalsIgnoreCase("@r")) {
+                    Random rand = new Random();
+                    int i = rand.nextInt(Bukkit.getOnlinePlayers().toArray().length);
+                    Player player = (Player) Bukkit.getOnlinePlayers().toArray()[i];
+                    gameManager.leavePlayer(player);
+                    return true;
+                } else if (args[1].equalsIgnoreCase("@s") || args[1].equalsIgnoreCase("@p")) {
+                    Player player = (Player) sender;
+                    gameManager.leavePlayer(player);
+                    return true;
+                } else if (Bukkit.getPlayer(args[1]) != null) {
+                    Player player = Bukkit.getPlayer(args[1]);
+                    gameManager.leavePlayer(player);
+                    return true;
+                } else {
+                    gameManager.sendMessage("해당 플레이어를 찾을 수 없습니다.");
+                }
             } else if (args[0].equalsIgnoreCase("stop")) {
                 gameManager.stop();
+            } else if (args[0].equalsIgnoreCase("config")) {
+
             }
         }
 

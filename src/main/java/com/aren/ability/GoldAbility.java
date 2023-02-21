@@ -2,8 +2,7 @@ package com.aren.ability;
 
 import com.aren.config.ConfigFile;
 import com.aren.config.ConfigManager;
-import com.aren.utils.GamePlayer;
-import org.bukkit.Location;
+import com.aren.utils.player.GamePlayer;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;

@@ -1,7 +1,7 @@
 package com.aren.ability.factory;
 
 import com.aren.ability.*;
-import com.aren.utils.GamePlayer;
+import com.aren.utils.player.GamePlayer;
 
 public class MaterialAbilityFactory implements AbilityFactory {
     @Override

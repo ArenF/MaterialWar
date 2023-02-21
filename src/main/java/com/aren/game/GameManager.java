@@ -1,18 +1,20 @@
 package com.aren.game;
 
-import com.aren.game.state.GameInvulnerableStateBuilder;
-import com.aren.game.state.GameStartStateBuilder;
+import com.aren.config.ConfigFile;
+import com.aren.config.ConfigManager;
 import com.aren.game.state.GameState;
 import com.aren.game.state.GameStateBuilder;
-import com.aren.utils.GamePlayer;
+import com.aren.utils.WorldBarrier;
+import com.aren.utils.player.GamePlayer;
+import com.aren.utils.player.PlayerState;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.Consumer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,8 +22,7 @@ public class GameManager {
 
     private GameState state = GameState.WAITING;
     private static GameManager INSTANCE = new GameManager();
-
-    private List<GamePlayer> participants = new ArrayList<>();
+    private final HashMap<UUID, GamePlayer> participants = new HashMap<>();
     private GameStateBuilder gameStateBuilder;
     private Consumer<EntityDamageEvent> invulnerableEventConsumer;
 
@@ -35,14 +36,22 @@ public class GameManager {
     }
 
     public void joinPlayer(Player player) {
-        GamePlayer gamePlayer = new GamePlayer(player);
-        if (participants.contains(gamePlayer)) {
+        if (contains(player)) {
             sendMessage("&e해당 플레이어는 이미 들어와 있습니다.");
             return;
         }
-        sendMessage("&a" + player.getName() + "님이 게임에 들어왔습니다.");
-        participants.add(gamePlayer);
+        GamePlayer gamePlayer = new GamePlayer(player, PlayerState.ALIVE);
+        sendMessage("&a" + player.getName() + "님이 게임에 참가하였습니다.");
+        participants.put(player.getUniqueId(), gamePlayer);
+    }
 
+    public void leavePlayer(Player player) {
+        if (!contains(player)) {
+            sendMessage("&e해당 플레이어는 존재하지 않습니다.");
+            return;
+        }
+        sendMessage("&a" + player.getName() + "님이 게임에 나가졌습니다.");
+        participants.remove(player.getUniqueId());
     }
 
     public void start(GameState state) {
@@ -54,6 +63,9 @@ public class GameManager {
     }
 
     public void stop() {
+        if (gameStateBuilder == null) {
+            sendMessage("&e게임이 시작되지 않았습니다.");
+        }
         gameStateBuilder.deactivate();
     }
 
@@ -84,25 +96,16 @@ public class GameManager {
         return state;
     }
 
-    public List<GamePlayer> getParticipants() {
+    public HashMap<UUID, GamePlayer> getParticipants() {
         return participants;
     }
 
     public GamePlayer getParticipant(UUID uuid) {
-        for (GamePlayer gamePlayer : participants) {
-            if (gamePlayer.getUniqueId().equals(uuid))
-                return gamePlayer;
-        }
-        return null;
+        return participants.get(uuid);
     }
 
     public boolean contains(Player player) {
-        for (GamePlayer gamePlayer : participants) {
-            if (player.getUniqueId().equals(gamePlayer.getUniqueId())) {
-                return true;
-            }
-        }
-        return false;
+        return participants.containsKey(player.getUniqueId());
     }
 
 }

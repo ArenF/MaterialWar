@@ -2,8 +2,7 @@ package com.aren.ability;
 
 import com.aren.config.ConfigFile;
 import com.aren.config.ConfigManager;
-import com.aren.materialwar.MaterialWar;
-import com.aren.utils.GamePlayer;
+import com.aren.utils.player.GamePlayer;
 import com.aren.utils.PersonalVector;
 import org.bukkit.*;
 import org.bukkit.entity.*;

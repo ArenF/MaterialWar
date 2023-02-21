@@ -1,14 +1,16 @@
 package com.aren.game.state;
 
-import com.aren.utils.GamePlayer;
+import com.aren.utils.player.GamePlayer;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class GameEndStateBuilder extends GameStateBuilder {
 
-    private List<GamePlayer> players;
+    private HashMap<UUID, GamePlayer> players;
 
-    public GameEndStateBuilder(List<GamePlayer> players) {
+    public GameEndStateBuilder(HashMap<UUID, GamePlayer> players) {
         this.players = players;
     }
 
@@ -33,13 +35,18 @@ public class GameEndStateBuilder extends GameStateBuilder {
     }
 
     @Override
-    protected void setWorldborder() {
+    protected void activateWorldBorder() {
+
+    }
+
+    @Override
+    protected void deactivateWorldBorder() {
 
     }
 
     @Override
     protected void activateMessage() {
-        for (GamePlayer player : players) {
+        for (GamePlayer player : players.values()) {
             player.getPlayer().sendMessage("게임이 끝났습니다.");
         }
     }

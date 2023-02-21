@@ -1,18 +1,25 @@
 package com.aren.game.state;
 
+import com.aren.config.ConfigFile;
+import com.aren.config.ConfigManager;
 import com.aren.game.GameManager;
-import com.aren.utils.GamePlayer;
+import com.aren.utils.WorldBarrier;
+import com.aren.utils.player.GamePlayer;
 import org.bukkit.ChatColor;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class GameStateBuilder {
 
+    private ConfigFile gameConfig = ConfigManager.getInstance().getConfigFile("gameConfig");
     GameManager gameManager = GameManager.getInstance();
+    protected WorldBarrier worldBarrier = new WorldBarrier(gameConfig.getConfig().getLocation("game.startLocation"));
 
     public static GameStateBuilder create(GameState state) {
         GameStateBuilder builder = null;
-        List<GamePlayer> users = GameManager.getInstance().getParticipants();
+        HashMap<UUID, GamePlayer> users = GameManager.getInstance().getParticipants();
         switch (state) {
             case WAITING:
                 builder = null;
@@ -32,13 +39,14 @@ public abstract class GameStateBuilder {
     public void activate() {
         changeState();
         castTimer();
-        setWorldborder();
         managePlayers();
         activateMessage();
+        activateWorldBorder();
     }
 
     public void deactivate() {
         closeTimer();
+        deactivateWorldBorder();
         deactivateMessage();
     }
 
@@ -58,7 +66,8 @@ public abstract class GameStateBuilder {
     protected abstract void closeTimer();
     protected abstract void managePlayers();
     protected abstract void changeState();
-    protected abstract void setWorldborder();
+    protected abstract void activateWorldBorder();
+    protected abstract void deactivateWorldBorder();
 
     protected abstract void activateMessage();
     protected abstract void deactivateMessage();
