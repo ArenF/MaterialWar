@@ -10,11 +10,12 @@ import org.bukkit.entity.Player;
 
 public class WorldBarrier {
 
-    private ConfigFile gameConfig = ConfigManager.getInstance().getConfigFile("gameConfig");
+    ConfigFile gameConfig = ConfigManager.getInstance().getConfigFile("gameConfig");
 
     private int taskId = -1;
     private double damage;
     private double buffer;
+    private boolean move;
     private double defaultSize;
     private double reduceDistance;
     private int reduceCount;
@@ -24,6 +25,7 @@ public class WorldBarrier {
     WorldBorder worldBorder;
 
     public WorldBarrier(Location center) {
+        move = gameConfig.getConfig().getBoolean("game.worldBorder.move_enable");
         damage = gameConfig.getConfig().getDouble("game.worldBorder.damage");
         buffer = gameConfig.getConfig().getDouble("game.worldBorder.buffer");
         defaultSize = gameConfig.getConfig().getDouble("game.worldBorder.default_size");
@@ -55,7 +57,7 @@ public class WorldBarrier {
         if (bar == null) {
             return;
         }
-        if (gameConfig.getConfig().getBoolean("game.worldBorder.move_enable")) {
+        if (!move) {
             return;
         }
 

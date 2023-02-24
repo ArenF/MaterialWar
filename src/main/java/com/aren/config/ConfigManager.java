@@ -25,6 +25,10 @@ public class ConfigManager {
         }
     }
 
+    public HashMap<String, ConfigFile> getConfigFiles() {
+        return configFileMap;
+    }
+
     public void addConfigFile(String name, ConfigFile configFile) {
         configFileMap.put(name, configFile);
     }

@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class AbilityListener implements Listener {
 
@@ -31,23 +32,27 @@ public class AbilityListener implements Listener {
 
         if (a.equals(Action.RIGHT_CLICK_AIR) || a.equals(Action.RIGHT_CLICK_BLOCK)) {
             GamePlayer gamePlayer = gameManager.getParticipant(p.getUniqueId());
+            ItemStack item = p.getInventory().getItemInMainHand();
             switch (p.getInventory().getItemInMainHand().getType()) {
                 case DIAMOND:
                     if (gamePlayer.getAbility(AbilityType.DIAMOND) == null)
                         return;
-
-                    gamePlayer.getAbility(AbilityType.DIAMOND).activate(p.getInventory().getItemInMainHand().getAmount());
+                    gamePlayer.getAbility(AbilityType.DIAMOND).activate(item.getAmount());
                     break;
                 case IRON_INGOT:
                     if (gamePlayer.getAbility(AbilityType.IRON) == null)
                         return;
-
-                    gamePlayer.getAbility(AbilityType.IRON).activate(p.getInventory().getItemInMainHand().getAmount());
+                    gamePlayer.getAbility(AbilityType.IRON).activate(item.getAmount());
                     break;
                 case GOLD_INGOT:
                     if (gamePlayer.getAbility(AbilityType.GOLD) == null)
                         return;
-                    gamePlayer.getAbility(AbilityType.GOLD).activate(p.getInventory().getItemInMainHand().getAmount());
+                    gamePlayer.getAbility(AbilityType.GOLD).activate(item.getAmount());
+                    break;
+                case COBBLESTONE:
+                    if (gamePlayer.getAbility(AbilityType.STONE) == null)
+                        return;
+                    gamePlayer.getAbility(AbilityType.STONE).activate(item.getAmount());
                     break;
             }
         }

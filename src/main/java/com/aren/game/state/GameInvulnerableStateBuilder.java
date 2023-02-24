@@ -28,6 +28,11 @@ public class GameInvulnerableStateBuilder extends GameStateBuilder {
     }
 
     @Override
+    public TimerBar getTimerBar() {
+        return bar;
+    }
+
+    @Override
     protected void castTimer() {
         String timeString = gameConfig.getConfig().getString("game.invulnerable_time");
 
@@ -50,9 +55,9 @@ public class GameInvulnerableStateBuilder extends GameStateBuilder {
     protected void managePlayers() {
         MaterialAbilityFactory factory = new MaterialAbilityFactory();
         for (GamePlayer player : players.values()) {
-            player.addAbility(AbilityType.DIAMOND, factory.createAbility(AbilityType.DIAMOND, player));
-            player.addAbility(AbilityType.IRON, factory.createAbility(AbilityType.IRON, player));
-            player.addAbility(AbilityType.GOLD, factory.createAbility(AbilityType.GOLD, player));
+            for (AbilityType type : AbilityType.values()) {
+                player.addAbility(type, factory.createAbility(type, player));
+            }
         }
     }
 

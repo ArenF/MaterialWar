@@ -29,6 +29,14 @@ public class GamePlayer {
         return uniqueId;
     }
 
+    public PlayerState getStatus() {
+        return state;
+    }
+
+    public void setStatus(PlayerState state) {
+        this.state = state;
+    }
+
     public void addAbility(AbilityType type, MaterialAbility ability) {
         abilities.put(type, ability);
     }

@@ -7,12 +7,17 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GoldAbility implements MaterialAbility {
 
     private GamePlayer player;
     private double heal;
     private int cooltime;
+    private int removeEffectLimit;
 
     ConfigFile skillConfig = ConfigManager.getInstance().getConfigFile("skillConfig");
 
@@ -20,7 +25,15 @@ public class GoldAbility implements MaterialAbility {
         this.player = player;
         heal = skillConfig.getConfig().getDouble("gold.heal");
         cooltime = skillConfig.getConfig().getInt("gold.cooltime");
+        removeEffectLimit = skillConfig.getConfig().getInt("gold.removeEffectCost");
+    }
 
+    @Override
+    public void load() {
+        skillConfig.load();
+        heal = skillConfig.getConfig().getDouble("gold.heal");
+        cooltime = skillConfig.getConfig().getInt("gold.cooltime");
+        removeEffectLimit = skillConfig.getConfig().getInt("gold.removeEffectCost");
     }
 
     @Override
@@ -33,6 +46,14 @@ public class GoldAbility implements MaterialAbility {
             user.sendMessage("스킬을 사용하기까지 " + display_cooltime + "초 남았습니다.");
             return;
         }
+        user.getInventory().removeItem(user.getInventory().getItemInMainHand());
+
+        if (cost > removeEffectLimit) {
+            for (PotionEffectType type : debufftypes()) {
+                user.removePotionEffect(type);
+            }
+            user.setFireTicks(0);
+        }
 
         double addHealth = heal * cost;
 
@@ -42,5 +63,19 @@ public class GoldAbility implements MaterialAbility {
         user.setHealth(Math.min(user.getHealth() + addHealth, user.getHealthScale()));
 
         user.setCooldown(user.getInventory().getItemInMainHand().getType(), cooltime * 20);
+    }
+
+    private List<PotionEffectType> debufftypes() {
+        List<PotionEffectType> result = new ArrayList<>();
+        result.add(PotionEffectType.BLINDNESS); result.add(PotionEffectType.GLOWING);
+        result.add(PotionEffectType.BAD_OMEN); result.add(PotionEffectType.CONFUSION);
+        result.add(PotionEffectType.DARKNESS); result.add(PotionEffectType.HUNGER);
+        result.add(PotionEffectType.HARM); result.add(PotionEffectType.WITHER);
+        result.add(PotionEffectType.POISON); result.add(PotionEffectType.SLOW);
+        result.add(PotionEffectType.SLOW_DIGGING); result.add(PotionEffectType.SLOW_FALLING);
+        result.add(PotionEffectType.UNLUCK); result.add(PotionEffectType.WEAKNESS);
+        result.add(PotionEffectType.LEVITATION);
+
+        return result;
     }
 }

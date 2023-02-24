@@ -7,4 +7,5 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 public interface MaterialAbility {
 
     void activate(int cost);
+    void load();
 }

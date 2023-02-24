@@ -8,6 +8,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.util.Consumer;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +27,8 @@ public class TimerBar {
     private int taskId = -1;
     private boolean closed = false;
     private BossBar bar;
+
+    private Consumer<PlayerJoinEvent> eventConsumer = null;
 
     public TimerBar(String title, int time, BarColor color, HashMap<UUID, GamePlayer> players) {
         this.time = time;
@@ -42,11 +47,22 @@ public class TimerBar {
         cast();
     }
 
+    public Consumer<PlayerJoinEvent> getEventConsumer() {
+        return eventConsumer;
+    }
+
     public void cast() {
 
         for (GamePlayer player : players.values()) {
             bar.addPlayer(player.getPlayer());
         }
+
+        eventConsumer = event -> {
+            Player player = event.getPlayer();
+            if (gameManager.contains(player)) {
+                bar.addPlayer(player);
+            }
+        };
 
         taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(MaterialWar.getPlugin(), new Runnable() {
 
@@ -81,7 +97,7 @@ public class TimerBar {
 
                 progress = progress - timer < 0 ? 0 : progress - timer;
             }
-        }, 0, 1);
+        }, 0, 20);
     }
 
     public void close() {
@@ -94,6 +110,8 @@ public class TimerBar {
 
         if (gameManager.getState().equals(GameState.INVULNERABLE)) {
             gameManager.start(GameState.STARTING);
+        } else if (gameManager.getState().equals(GameState.STARTING)) {
+            gameManager.start(GameState.COMPLETED);
         }
     }
 

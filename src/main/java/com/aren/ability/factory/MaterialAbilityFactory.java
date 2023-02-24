@@ -18,6 +18,10 @@ public class MaterialAbilityFactory implements AbilityFactory {
                 break;
             case GOLD:
                 effect = new GoldAbility(player);
+                break;
+            case STONE:
+                effect = new StoneAbility(player);
+                break;
         }
 
         return effect;

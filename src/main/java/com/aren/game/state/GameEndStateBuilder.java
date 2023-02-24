@@ -1,5 +1,6 @@
 package com.aren.game.state;
 
+import com.aren.utils.TimerBar;
 import com.aren.utils.player.GamePlayer;
 
 import java.util.HashMap;
@@ -12,6 +13,11 @@ public class GameEndStateBuilder extends GameStateBuilder {
 
     public GameEndStateBuilder(HashMap<UUID, GamePlayer> players) {
         this.players = players;
+    }
+
+    @Override
+    public TimerBar getTimerBar() {
+        return null;
     }
 
     @Override

@@ -4,9 +4,12 @@ import com.aren.config.ConfigFile;
 import com.aren.config.ConfigManager;
 import com.aren.game.state.GameState;
 import com.aren.game.state.GameStateBuilder;
+import com.aren.game.team.GameTeam;
+import com.aren.utils.TimerBar;
 import com.aren.utils.WorldBarrier;
 import com.aren.utils.player.GamePlayer;
 import com.aren.utils.player.PlayerState;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -25,6 +28,7 @@ public class GameManager {
     private final HashMap<UUID, GamePlayer> participants = new HashMap<>();
     private GameStateBuilder gameStateBuilder;
     private Consumer<EntityDamageEvent> invulnerableEventConsumer;
+    private GameTeam team = GameTeam.getInstance();
 
     public GameManager() {}
 
@@ -65,6 +69,7 @@ public class GameManager {
     public void stop() {
         if (gameStateBuilder == null) {
             sendMessage("&e게임이 시작되지 않았습니다.");
+            return;
         }
         gameStateBuilder.deactivate();
     }
@@ -72,6 +77,13 @@ public class GameManager {
 
     public void end() {
 
+    }
+
+    public TimerBar getTimerBar() {
+        if (gameStateBuilder == null)
+            return null;
+
+        return gameStateBuilder.getTimerBar();
     }
 
     public void setInvulnerableEventConsumer(Consumer<EntityDamageEvent> event) {

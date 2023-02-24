@@ -10,6 +10,7 @@ import com.aren.utils.WorldBarrier;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
@@ -23,11 +24,17 @@ public class GameStartStateBuilder extends GameStateBuilder{
     private HashMap<UUID, GamePlayer> users;
     private TimerBar timerBar;
     private ConfigFile gameConfig;
+    private ConfigFile playerConfig;
 
     public GameStartStateBuilder(HashMap<UUID, GamePlayer> users) {
-
         this.users = users;
         gameConfig = ConfigManager.getInstance().getConfigFile("gameConfig");
+        playerConfig = ConfigManager.getInstance().getConfigFile("playerConfig");
+    }
+
+    @Override
+    public TimerBar getTimerBar() {
+        return timerBar;
     }
 
     @Override
@@ -56,11 +63,9 @@ public class GameStartStateBuilder extends GameStateBuilder{
         MaterialAbilityFactory factory = new MaterialAbilityFactory();
 //        플레이어들이 사용할 스킬들을 활성화
         for (GamePlayer player: users.values()) {
-            player.addAbility(AbilityType.DIAMOND, factory.createAbility(AbilityType.DIAMOND, player));
-            player.addAbility(AbilityType.IRON, factory.createAbility(AbilityType.IRON, player));
-            player.addAbility(AbilityType.GOLD, factory.createAbility(AbilityType.GOLD, player));
-
-
+            for (AbilityType type : AbilityType.values()) {
+                player.addAbility(type, factory.createAbility(type, player));
+            }
         }
     }
 

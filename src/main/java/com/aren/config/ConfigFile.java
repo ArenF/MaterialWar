@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class ConfigFile {
 
-    private File file;
+    private final File file;
     private FileConfiguration config;
 
     public ConfigFile(Plugin plugin, String name) {

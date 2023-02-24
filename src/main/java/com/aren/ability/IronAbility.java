@@ -21,6 +21,7 @@ public class IronAbility implements MaterialAbility {
     private GamePlayer player;
     private int taskId = -1;
     private int cooltime;
+    private int interval;
     private List<Material> ironTools = new ArrayList<>();
     private List<Enchantment> enchantable = new ArrayList<>();
     private ConfigFile skillConfig = ConfigManager.getInstance().getConfigFile("skillConfig");
@@ -28,6 +29,7 @@ public class IronAbility implements MaterialAbility {
     public IronAbility(GamePlayer player) {
         this.player = player;
         cooltime = skillConfig.getConfig().getInt("iron.cooltime");
+        interval = skillConfig.getConfig().getInt("iron.level_interval");
         ironTools.add(Material.IRON_SWORD); ironTools.add(Material.IRON_AXE);
         ironTools.add(Material.IRON_SHOVEL); ironTools.add(Material.IRON_PICKAXE);
         ironTools.add(Material.IRON_HOE); ironTools.add(Material.IRON_HELMET);
@@ -41,24 +43,29 @@ public class IronAbility implements MaterialAbility {
         enchantable.add(Enchantment.DURABILITY); enchantable.add(Enchantment.LOOT_BONUS_BLOCKS);
         enchantable.add(Enchantment.LOOT_BONUS_MOBS); enchantable.add(Enchantment.DIG_SPEED);
     }
+
+    @Override
+    public void load() {
+        skillConfig.load();
+        cooltime = skillConfig.getConfig().getInt("iron.cooltime");
+        interval = skillConfig.getConfig().getInt("iron.level_interval");
+    }
+
     @Override
     public void activate(int cost) {
         Player user = player.getPlayer();
+        ItemStack item = user.getInventory().getItemInMainHand();
 
         if (user.hasCooldown(user.getInventory().getItemInMainHand().getType())) {
             int display_cooltime = (int) user.getCooldown(user.getInventory().getItemInMainHand().getType()) / 20;
             user.sendMessage("스킬을 사용하기까지 " + display_cooltime + "초 남았습니다.");
             return;
         }
-
-        int interval = skillConfig.getConfig().getInt("iron.level_interval");
+        user.getInventory().removeItem(user.getInventory().getItemInMainHand());
 
         Random rand = new Random();
         int randomItemIndex = rand.nextInt(ironTools.size());
         int randomEnchantIndex = rand.nextInt(enchantable.size());
-        Material material = ironTools.get(randomItemIndex);
-        Enchantment enchantment = enchantable.get(randomEnchantIndex);
-        int lvl = (int) cost / interval;
 
 //        ItemStack item = new ItemStack(material);
 //        ItemMeta meta = item.getItemMeta();
@@ -98,7 +105,6 @@ public class IronAbility implements MaterialAbility {
     }
 
     public ItemStack createItem(int cost) {
-        int interval = skillConfig.getConfig().getInt("iron.level_interval");
 
         Random rand = new Random();
         int randomItemIndex = rand.nextInt(ironTools.size());

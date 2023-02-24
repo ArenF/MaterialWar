@@ -29,6 +29,14 @@ public class DiamondAbility implements MaterialAbility {
     }
 
     @Override
+    public void load() {
+        skillConfig.load();
+        this.damage = skillConfig.getConfig().getDouble("diamond.damage");
+        this.length = skillConfig.getConfig().getDouble("diamond.length");
+        this.cooltime = skillConfig.getConfig().getInt("diamond.cooltime");
+    }
+
+    @Override
     public void activate(int cost) {
         Player user = player.getPlayer();
         Location location = user.getLocation();
@@ -40,6 +48,7 @@ public class DiamondAbility implements MaterialAbility {
             user.sendMessage("스킬을 사용하기까지 " + display_cooltime + "초 남았습니다.");
             return;
         }
+        user.getInventory().removeItem(user.getInventory().getItemInMainHand());
 
         List<UUID> damagedEntityList = new ArrayList<>();   
         for (int i=0; i < length*5; i++) {

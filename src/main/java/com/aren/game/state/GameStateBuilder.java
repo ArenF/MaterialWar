@@ -3,6 +3,7 @@ package com.aren.game.state;
 import com.aren.config.ConfigFile;
 import com.aren.config.ConfigManager;
 import com.aren.game.GameManager;
+import com.aren.utils.TimerBar;
 import com.aren.utils.WorldBarrier;
 import com.aren.utils.player.GamePlayer;
 import org.bukkit.ChatColor;
@@ -61,6 +62,8 @@ public abstract class GameStateBuilder {
     protected String format(String msg) {
         return ChatColor.translateAlternateColorCodes('&', "[&aMaterialWar&f] " + msg);
     }
+
+    public abstract TimerBar getTimerBar();
 
     protected abstract void castTimer();
     protected abstract void closeTimer();
