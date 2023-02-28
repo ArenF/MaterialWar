@@ -1,5 +1,5 @@
 package com.aren.ability;
 
 public enum AbilityType {
-    DIAMOND, IRON, GOLD, STONE, COAL
+    DIAMOND, IRON, GOLD, STONE, COAL, EMERALD, REDSTONE, LAPIS
 }

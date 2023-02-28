@@ -61,18 +61,13 @@ public class IronAbility implements MaterialAbility {
             user.sendMessage("스킬을 사용하기까지 " + display_cooltime + "초 남았습니다.");
             return;
         }
-        user.getInventory().removeItem(user.getInventory().getItemInMainHand());
-
-        Random rand = new Random();
-        int randomItemIndex = rand.nextInt(ironTools.size());
-        int randomEnchantIndex = rand.nextInt(enchantable.size());
-
 //        ItemStack item = new ItemStack(material);
 //        ItemMeta meta = item.getItemMeta();
 //        meta.addEnchant(enchantment, lvl, true);
 //        item.setItemMeta(meta);
 
-        user.playSound(user.getLocation(), Sound.BLOCK_ANVIL_USE, 0.1f, 1.0f);
+        user.getWorld().playSound(user.getLocation(), Sound.BLOCK_ANVIL_USE, 0.1f, 1.0f);
+
         taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(MaterialWar.getPlugin(), new Runnable() {
 
             World w = user.getWorld();
@@ -99,9 +94,8 @@ public class IronAbility implements MaterialAbility {
 
             }
         }, 0, 10);
-
-
         user.setCooldown(user.getInventory().getItemInMainHand().getType(), cooltime * 20);
+        user.getInventory().removeItem(user.getInventory().getItemInMainHand());
     }
 
     public ItemStack createItem(int cost) {

@@ -46,7 +46,6 @@ public class GoldAbility implements MaterialAbility {
             user.sendMessage("스킬을 사용하기까지 " + display_cooltime + "초 남았습니다.");
             return;
         }
-        user.getInventory().removeItem(user.getInventory().getItemInMainHand());
 
         if (cost > removeEffectLimit) {
             for (PotionEffectType type : debufftypes()) {
@@ -63,6 +62,7 @@ public class GoldAbility implements MaterialAbility {
         user.setHealth(Math.min(user.getHealth() + addHealth, user.getHealthScale()));
 
         user.setCooldown(user.getInventory().getItemInMainHand().getType(), cooltime * 20);
+        user.getInventory().removeItem(user.getInventory().getItemInMainHand());
     }
 
     private List<PotionEffectType> debufftypes() {

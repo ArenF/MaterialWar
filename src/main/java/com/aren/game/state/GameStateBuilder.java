@@ -33,6 +33,10 @@ public abstract class GameStateBuilder {
                 break;
             case COMPLETED:
                 builder = new GameEndStateBuilder(users);
+                break;
+            case TEST:
+                builder = new GameTestStateBuilder(users);
+                break;
         }
         return builder;
     }

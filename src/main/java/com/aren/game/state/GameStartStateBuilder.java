@@ -4,17 +4,22 @@ import com.aren.ability.AbilityType;
 import com.aren.ability.factory.MaterialAbilityFactory;
 import com.aren.config.ConfigFile;
 import com.aren.config.ConfigManager;
+import com.aren.game.team.GameTeam;
 import com.aren.utils.player.GamePlayer;
 import com.aren.utils.TimerBar;
 import com.aren.utils.WorldBarrier;
+import com.aren.utils.player.PlayerState;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
+import org.json.simple.JSONArray;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -60,13 +65,21 @@ public class GameStartStateBuilder extends GameStateBuilder{
 
     @Override
     protected void managePlayers() {
+        FileConfiguration config = playerConfig.getConfig();
         MaterialAbilityFactory factory = new MaterialAbilityFactory();
+        List<String> names = new ArrayList<>();
 //        플레이어들이 사용할 스킬들을 활성화
         for (GamePlayer player: users.values()) {
             for (AbilityType type : AbilityType.values()) {
                 player.addAbility(type, factory.createAbility(type, player));
             }
+
+            names.add(player.getName());
         }
+
+        config.set(PlayerState.ALIVE.name(), names);
+        playerConfig.save();
+
     }
 
     @Override

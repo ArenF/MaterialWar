@@ -19,8 +19,20 @@ public class MaterialAbilityFactory implements AbilityFactory {
             case GOLD:
                 effect = new GoldAbility(player);
                 break;
+            case COAL:
+                effect = new CoalAbility(player);
+                break;
             case STONE:
                 effect = new StoneAbility(player);
+                break;
+            case EMERALD:
+                effect = new EmeraldAbility(player);
+                break;
+            case REDSTONE:
+                effect = new RedstoneAbility(player);
+                break;
+            case LAPIS:
+                effect = new LapisAbility(player);
                 break;
         }
 

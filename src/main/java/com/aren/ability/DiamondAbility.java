@@ -48,8 +48,8 @@ public class DiamondAbility implements MaterialAbility {
             user.sendMessage("스킬을 사용하기까지 " + display_cooltime + "초 남았습니다.");
             return;
         }
-        user.getInventory().removeItem(user.getInventory().getItemInMainHand());
 
+        w.playSound(location, Sound.ENTITY_ILLUSIONER_MIRROR_MOVE, 1.0f, 1.0f);
         List<UUID> damagedEntityList = new ArrayList<>();   
         for (int i=0; i < length*5; i++) {
             Vector direction = PersonalVector.rotateFunction(new Vector(0.0, 0.0, (double) i/2), eyeLocation);
@@ -73,6 +73,7 @@ public class DiamondAbility implements MaterialAbility {
         }
 
         user.setCooldown(user.getInventory().getItemInMainHand().getType(), cooltime * 20);
+        user.getInventory().removeItem(user.getInventory().getItemInMainHand());
     }
 
     private void takeDamage(Location loc, List<UUID> uuids, int cost, double damage, Player user) {

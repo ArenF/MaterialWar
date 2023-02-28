@@ -56,7 +56,6 @@ public class StoneAbility implements MaterialAbility {
             p.sendMessage("스킬을 사용하기까지 " + display_cooltime + "초 남았습니다.");
             return;
         }
-        p.getInventory().removeItem(p.getInventory().getItemInMainHand());
 
 
         Random rand = new Random();
@@ -113,5 +112,6 @@ public class StoneAbility implements MaterialAbility {
             }
         }, 0, 2);
         p.setCooldown(item.getType(), cooltime * 20);
+        p.getInventory().removeItem(p.getInventory().getItemInMainHand());
     }
 }

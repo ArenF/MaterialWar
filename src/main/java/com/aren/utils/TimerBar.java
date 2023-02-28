@@ -5,6 +5,7 @@ import com.aren.game.state.GameState;
 import com.aren.materialwar.MaterialWar;
 import com.aren.utils.player.GamePlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -24,7 +25,7 @@ public class TimerBar {
     private String title;
     private BarColor color;
     private HashMap<UUID, GamePlayer> players;
-    private int taskId = -1;
+    private int taskId = -4;
     private boolean closed = false;
     private BossBar bar;
 
@@ -74,9 +75,13 @@ public class TimerBar {
                 bar.setProgress(progress);
 
                 if (progress == 0) {
-                    close();
+                    close(gameManager.getState());
                     Bukkit.getScheduler().cancelTask(taskId);
                 }
+                if (isClosed()) {
+                    Bukkit.getScheduler().cancelTask(taskId);
+                }
+
                 String title = bar.getTitle();
 
                 double title_progress = progress * time;
@@ -93,11 +98,28 @@ public class TimerBar {
                     display_title = title.replaceAll(check_minute + "분 " + check_second + "초", display_time);
                 }
 
+                MaterialWar.getPlugin().getLogger().info(display_title);
+                MaterialWar.getPlugin().getLogger().info(display_time);
                 bar.setTitle(display_title);
 
                 progress = progress - timer < 0 ? 0 : progress - timer;
             }
         }, 0, 20);
+    }
+
+    public void close(GameState state) {
+        if (isClosed()) {
+            return;
+        }
+
+        setClosed(true);
+        bar.removeAll();
+
+        if (state.equals(GameState.INVULNERABLE)) {
+            gameManager.start(GameState.STARTING);
+        } else if (state.equals(GameState.STARTING)) {
+            gameManager.start(GameState.COMPLETED);
+        }
     }
 
     public void close() {
@@ -108,11 +130,6 @@ public class TimerBar {
         setClosed(true);
         bar.removeAll();
 
-        if (gameManager.getState().equals(GameState.INVULNERABLE)) {
-            gameManager.start(GameState.STARTING);
-        } else if (gameManager.getState().equals(GameState.STARTING)) {
-            gameManager.start(GameState.COMPLETED);
-        }
     }
 
     private boolean isClosed() {

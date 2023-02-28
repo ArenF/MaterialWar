@@ -203,6 +203,8 @@ public class MaterialWarExecutor implements CommandExecutor {
 
                     team.leave(name, player);
                 }
+            } else if (args[0].equalsIgnoreCase("test")) {
+                gameManager.start(GameState.TEST);
             }
         }
 
